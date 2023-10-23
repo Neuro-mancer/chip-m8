@@ -34,14 +34,17 @@ uint16_t stackPop(struct Hardware *chip8)
 	return popped;	
 }
 
-void initReg(struct Hardware *chip8)
+void initHardwareValues(struct Hardware *chip8)
 {
 	chip8->PC = PC_START;
 	chip8->Stack.SP = STACK_START;
 	chip8->Timers.delay = DELAY_TIMER_START;
 	chip8->Timers.sound = SOUND_TIMER_START;
+	chip8->Timers.lastCycleTime = CYCLE_TIMER_START;
+	chip8->Timers.lastDelayTimerWrite = DELAY_TIMER_START;
+	chip8->Timers.lastSoundTimerWrite = SOUND_TIMER_START;
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
-	printf("Hardware pointers and registers initialized with starting values\n");
+	printf("Hardware values initialized with starting values\n");
 }
 
 uint16_t fetch(struct Hardware *chip8)
@@ -232,4 +235,60 @@ bool loadROMIntoMem(char *fileName, struct Hardware *chip8)
 
 	fclose(ROM);
 	return success;
+}
+
+void updateTimers(struct Hardware *chip8)
+{
+	int ticksElapsedDelay;
+	int ticksElapsedSound;
+	int newTimerVal;
+
+	if(chip8->Timers.delay > 0)
+	{
+		ticksElapsedDelay = (SDL_GetTicks64() - chip8->Timers.lastDelayTimerWrite) / TIMER_TARGET_TIME;
+		newTimerVal = (int)(chip8->Timers.delay) - ticksElapsedDelay;
+
+		if(newTimerVal >= 0)
+		{
+			chip8->Timers.delay = newTimerVal;
+		}
+		else
+		{
+			chip8->Timers.delay = 0;
+		}
+
+		chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
+	}
+	else if(chip8->Timers.sound > 0)
+	{
+		ticksElapsedSound = (SDL_GetTicks64() - chip8->Timers.lastSoundTimerWrite) / TIMER_TARGET_TIME;
+		newTimerVal = (int)(chip8->Timers.delay) - ticksElapsedSound;
+
+		if(newTimerVal >= 0)
+		{
+			chip8->Timers.sound = newTimerVal;
+		}
+		else
+		{
+			chip8->Timers.sound = 0;
+
+		}
+
+		chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
+	}
+
+	printf("Timers updated | Sound: %d | Delay: %d\n", chip8->Timers.sound, chip8->Timers.delay);
+}
+
+void cycleTiming(struct Hardware *chip8) // times cycles to prespecified delay (see macros in instructions.h)
+{
+	int timeToSleep = CLOCK_TARGET_TIME - (SDL_GetTicks64() - chip8->Timers.lastCycleTime);
+	printf("Time to sleep: %d\n", timeToSleep);
+
+	if(timeToSleep > 0 && timeToSleep <= CLOCK_TARGET_TIME)
+	{
+		SDL_Delay(timeToSleep);
+	}
+
+	chip8->Timers.lastCycleTime = SDL_GetTicks64();
 }

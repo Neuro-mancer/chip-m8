@@ -2,17 +2,23 @@
 #define HARDWARE_H
 
 #include <stdbool.h>
+#include <SDL2/SDL.h>
 
-#define RAM_SIZE 4096 // in bytes
+#define RAM_SIZE 4096 
 #define STACK_SIZE 16
 #define NUM_REGISTERS 16
 #define DISPLAY_WIDTH 64
 #define DISPLAY_HEIGHT 32
 #define PC_START 0x200
 #define STACK_START -1
-#define DELAY_TIMER_START 255
-#define SOUND_TIMER_START 255
-#define MAX_ROM_SIZE 3584 // in bytes
+#define DELAY_TIMER_START 0
+#define SOUND_TIMER_START 0
+#define CYCLE_TIMER_START 0
+#define MAX_ROM_SIZE 3584
+#define CPU_CLOCK_SPEED 60 // HZ
+#define CLOCK_TARGET_TIME (1000 / CPU_CLOCK_SPEED) // in milliseconds
+#define TIMER_SPEED 60 // HZ
+#define TIMER_TARGET_TIME (1000 / TIMER_SPEED) // in milliseconds
 
 struct Hardware 
 {
@@ -24,13 +30,16 @@ struct Hardware
 	struct Stack
 	{
 		uint16_t items[STACK_SIZE];
-		int SP;
+		uint8_t SP;
 	} Stack;
 
 	struct Timers
 	{
 		uint8_t delay;
 		uint8_t sound;
+		int lastCycleTime; // stores time elasped since last cycle
+		int lastDelayTimerWrite;
+		int lastSoundTimerWrite;
 	} Timers;
 
 	bool displayBuffer[DISPLAY_HEIGHT][DISPLAY_WIDTH];
@@ -44,8 +53,12 @@ void stackPush(uint16_t item, struct Hardware *chip8);
 
 uint16_t stackPop(struct Hardware *chip8);
 
-void initReg(struct Hardware *chip8);
+void initHardwareValues(struct Hardware *chip8);
 
 bool loadROMIntoMem(char *fileName, struct Hardware *chip8);
+
+void cycleTiming(struct Hardware *chip8);
+
+void updateTimers(struct Hardware *chip8);
 
 #endif // HARDWARE_H

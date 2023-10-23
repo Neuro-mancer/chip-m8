@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <unistd.h> // remove when done with sleep function???
 #include "font.h"
 #include "hardware.h"
 #include "graphics.h"
@@ -10,9 +9,8 @@
 
 int main(int argc, char **argv)
 {
-	// bool quit = false;
+	bool quit = false;
 	int nextInstruction;
-	// initialize our chip-8 virtual hardware object
 	struct Hardware chip8;
 
 	// init 4KB chip-8 memory and load fonts into memory
@@ -24,7 +22,7 @@ int main(int argc, char **argv)
 	else
 	{
 		chip8.RAM = RAM;
-		initReg(&chip8);
+		initHardwareValues(&chip8);
 		loadFontIntoMem(chip8.RAM);
 		if(!loadROMIntoMem(argv[1], &chip8))
 		{
@@ -34,17 +32,15 @@ int main(int argc, char **argv)
 		{
 			graphicsInit();
 			clearScreen();
-			int cycle = 0;
 
-			while(cycle < 20)
+			while(!quit)
 			{
-				// quit = handleInput();
-				handleInput();
+				quit = handleInput();
 				nextInstruction = fetch(&chip8);
 				decode(nextInstruction, &chip8);
-				cycle++;
+				updateTimers(&chip8); // order of this wrong?
+				cycleTiming(&chip8); // perhaps look into ways to speed up execution
 			}
-			sleep(10);
 
 			graphicsCleanup();
 			free(chip8.RAM); 
