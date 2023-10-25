@@ -80,7 +80,9 @@ void execXOR(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 
 void execAdd(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
-	chip8->V[regNumX] += chip8->V[regNumY];
+	unsigned int result = chip8->V[regNumX] + chip8->V[regNumY];
+	chip8->V[0xF] = (result > 255) ? 1 : 0;
+	chip8->V[regNumX] = result;
 }
 
 void execSubtYFromX(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)

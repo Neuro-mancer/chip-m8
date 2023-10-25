@@ -8,7 +8,7 @@ bool handleInput(void)
 	bool quit = false;
 	SDL_Event event;
 	SDL_PollEvent(&event);
-	while( SDL_PollEvent(&event) != 0)
+	while(SDL_PollEvent(&event) != 0)
 	{
 		if(event.type == SDL_QUIT)
 		{
@@ -18,4 +18,3 @@ bool handleInput(void)
 
 	return quit;
 }
-
