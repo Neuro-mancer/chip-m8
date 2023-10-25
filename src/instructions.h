@@ -29,5 +29,16 @@ void execShiftLeft(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8);
 void execSkipRegNotEqual(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8);
 void execJumpOffset(uint16_t addr, struct Hardware *chip8);
 void execGenRandom(uint8_t value, uint8_t regNum, struct Hardware *chip8);
+void execSkipOnKeyPress(uint8_t regNum, struct Hardware *chip8);
+void execSkipOnKeyNotPressed(uint8_t regNum, struct Hardware *chip8);
+void execSetDelayTimerToReg(uint8_t regNum, struct Hardware *chip8);
+void execSetSoundTimerToReg(uint8_t regNum, struct Hardware *chip8);
+void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8);
+void execGetKey(uint8_t regNum, struct Hardware *chip8);
+void execSetIndexToFont(uint8_t regNum, struct Hardware *chip8);
+void execConvertIntToBCD(uint8_t regNum, struct Hardware *chip8);
+void execStoreRegInMem(uint8_t regNum, struct Hardware *chip8);
+void execLoadRegFromMem(uint8_t regNum, struct Hardware *chip8);
+void execSetRegToTimerVal(uint8_t regNum, struct Hardware *chip8);
 
 #endif // INSTRUCTIONS_H

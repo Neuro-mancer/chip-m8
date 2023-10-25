@@ -5,5 +5,6 @@
 #include <stdbool.h>
 
 bool handleInput(void);
+bool checkKeyPress(uint8_t keyCodeChip8);
 
 #endif // INPUT_H

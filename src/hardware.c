@@ -21,7 +21,7 @@ void stackPush(uint16_t item, struct Hardware *chip8)
 uint16_t stackPop(struct Hardware *chip8)
 {
 	uint16_t popped = 0;
-	if(chip8->Stack.SP == 0)
+	if(chip8->Stack.SP == -1)
 	{
 		printf("ERROR: CHIP-8 STACK UNDERFLOW\n");
 	}
@@ -85,7 +85,7 @@ void decode(uint16_t opcode, struct Hardware *chip8)
 				case 0x00E0:
 					execClearDisplay(chip8);
 					break;
-				case 0x000E:
+				case 0x00EE:
 					execRet(chip8);
 					break;
 				default:
@@ -168,8 +168,10 @@ void decode(uint16_t opcode, struct Hardware *chip8)
 			switch(byteMaskTwo)
 			{
 				case 0x009E:
+					execSkipOnKeyPress(digitTwo, chip8);
 					break;
 				case 0x00A1:
+					execSkipOnKeyNotPressed(digitTwo, chip8);
 					break;
 				default:
 					printf("Instruction 0x%04x not recognized!\n", opcode);
@@ -180,22 +182,31 @@ void decode(uint16_t opcode, struct Hardware *chip8)
 			switch(byteMaskTwo)
 			{
 				case 0x0007:
+					execSetRegToTimerVal(digitTwo, chip8);
 					break;
 				case 0x000A:
+					execGetKey(digitTwo, chip8);
 					break;
 				case 0x0015:
+					execSetDelayTimerToReg(digitTwo, chip8);
 					break;
 				case 0x0018:
+					execSetSoundTimerToReg(digitTwo, chip8);
 					break;
 				case 0x001E:
+					execAddRegToIndex(digitTwo, chip8);
 					break;
 				case 0x0029:
+					execSetIndexToFont(digitTwo, chip8);
 					break;
 				case 0x0033:
+					execConvertIntToBCD(digitTwo, chip8);
 					break;
 				case 0x0055:
+					execStoreRegInMem(digitTwo, chip8);
 					break;
 				case 0x0065:
+					execLoadRegFromMem(digitTwo, chip8);
 					break;
 				default:
 					printf("Instruction 0x%04x not recognized!\n", opcode);
