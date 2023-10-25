@@ -175,3 +175,8 @@ void execDraw(uint8_t regNumX, uint8_t regNumY, uint8_t height, struct Hardware 
 		}
 	}
 }
+
+void execSkipOnKeyPress(uint8_t regNum)
+{
+
+}

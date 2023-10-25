@@ -8,16 +8,14 @@ bool handleInput(void)
 	bool quit = false;
 	SDL_Event event;
 	SDL_PollEvent(&event);
-
-	switch (event.type)
+	while( SDL_PollEvent(&event) != 0)
 	{
-		case SDL_QUIT:
+		if(event.type == SDL_QUIT)
+		{
 			quit = true;
-			break;
-		default:
-			quit = false;
-			break;
+		}
 	}
 
 	return quit;
 }
+

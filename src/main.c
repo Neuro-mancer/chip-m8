@@ -35,11 +35,11 @@ int main(int argc, char **argv)
 
 			while(!quit)
 			{
-				quit = handleInput();
 				nextInstruction = fetch(&chip8);
 				decode(nextInstruction, &chip8);
-				updateTimers(&chip8); // order of this wrong?
 				cycleTiming(&chip8); // perhaps look into ways to speed up execution
+				updateTimers(&chip8); // order of this wrong?
+				quit = handleInput();
 			}
 
 			graphicsCleanup();
