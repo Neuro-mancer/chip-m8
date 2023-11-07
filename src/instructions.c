@@ -43,7 +43,7 @@ void execSkipNotEqual(uint8_t value, uint8_t regNum, struct Hardware *chip8)
 
 void execSkipRegEqual(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
-	chip8->PC += (regNumX == regNumY) ? 2 : 0;
+	chip8->PC += (chip8->V[regNumX] == chip8->V[regNumY]) ? 2 : 0;
 }
 
 void execSetReg(uint8_t value, uint8_t regNum, struct Hardware *chip8)
@@ -79,20 +79,21 @@ void execXOR(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 void execAdd(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
 	unsigned int result = chip8->V[regNumX] + chip8->V[regNumY];
-	chip8->V[regNumX] = result;
-	chip8->V[0xF] = (result > 255) ? 1 : 0;
+	chip8->V[regNumX] = chip8->V[regNumX] + chip8->V[regNumY];
+	chip8->V[0xF] = result > 255;
 }
 
 void execSubtYFromX(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
+	unsigned int regXOld = chip8->V[regNumX];
 	chip8->V[regNumX] -= chip8->V[regNumY];
-	chip8->V[0xF] = (chip8->V[regNumX] > chip8->V[regNumY]) ? 1 : 0;
+	chip8->V[0xF] = regXOld > chip8->V[regNumY];
 }
 
 void execSubtXFromY(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
 	chip8->V[regNumX] = chip8->V[regNumY] - chip8->V[regNumX];
-	chip8->V[0xF] = (chip8->V[regNumY] > chip8->V[regNumX]) ? 1 : 0;
+	chip8->V[0xF] = chip8->V[regNumY] > chip8->V[regNumX];
 }
 
 void execShiftRight(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
@@ -119,13 +120,12 @@ void execShiftLeft(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 
 void execSkipRegNotEqual(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
-	chip8->PC += (regNumX != regNumY) ? 2 : 0;
+	chip8->PC += (chip8->V[regNumX] != chip8->V[regNumY]) ? 2 : 0;
 }
 
 void execSetIndexReg(uint16_t addr, struct Hardware *chip8)
 {
 	chip8->I = addr;
-	printf("Index Address: 0x%04x\n", chip8->I);
 }
 
 void execJumpOffset(uint16_t addr, struct Hardware *chip8)
@@ -213,10 +213,11 @@ void execSetSoundTimerToReg(uint8_t regNum, struct Hardware *chip8)
 void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8)
 {
 	unsigned int result = chip8->I + chip8->V[regNum];
-	chip8->I = result;
-	chip8->V[0xF] = (result > 0xFFF) ? 1 : 0; // add macro for 0xFFF?
-	// 0xFFF is the last addressable memory location for our 4K of RAM
+	chip8->I = chip8->I + chip8->V[regNum];
+	chip8->V[0xF] = result > 0xFFF; // add macro for 0xFFF?
+	/* 0xFFF is the last addressable memory location for our 4K of RAM
 	// the flag seems to be optional behavior not found on original COSMAC interpreter
+	// it's nonetheless important */
 }
 
 void execGetKey(uint8_t regNum, struct Hardware *chip8)
@@ -295,9 +296,9 @@ void execConvertIntToBCD(uint8_t regNum, struct Hardware *chip8)
 	uint8_t tens = (chip8->V[regNum] / 10) % 10;
 	uint8_t hundreds = (chip8->V[regNum] / 100) % 10;
 
-	chip8->RAM[chip8->I] = ones;
+	chip8->RAM[chip8->I] = hundreds;
 	chip8->RAM[chip8->I + 1] = tens;
-	chip8->RAM[chip8->I + 2] = hundreds;
+	chip8->RAM[chip8->I + 2] = ones;
 }
 
 // note: these instructions follow the modern interpreter routine storing

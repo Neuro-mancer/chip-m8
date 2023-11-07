@@ -15,7 +15,7 @@
 #define SOUND_TIMER_START 0
 #define CYCLE_TIMER_START 0
 #define MAX_ROM_SIZE 3584
-#define CPU_CLOCK_SPEED 60 // HZ
+#define CPU_CLOCK_SPEED 500 // HZ
 #define CLOCK_TARGET_TIME (1000 / CPU_CLOCK_SPEED) // in milliseconds
 #define TIMER_SPEED 60 // HZ
 #define TIMER_TARGET_TIME (1000 / TIMER_SPEED) // in milliseconds
