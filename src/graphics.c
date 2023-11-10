@@ -57,6 +57,8 @@ void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
 		SCREEN_SCALE,
 		SCREEN_SCALE,	
 	};
+
+	// consider optimizing this function by making sure it doesn't redraw if a pixel is *ALREADY* that color??
 	
 	if(pixelOn)
 	{

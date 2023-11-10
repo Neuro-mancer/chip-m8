@@ -77,7 +77,7 @@ void execXOR(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 void execAdd(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
 	unsigned int result = chip8->V[regNumX] + chip8->V[regNumY];
-	chip8->V[regNumX] = chip8->V[regNumX] + chip8->V[regNumY];
+	chip8->V[regNumX] += chip8->V[regNumY];
 	chip8->V[0xF] = result > 255;
 }
 
@@ -165,6 +165,8 @@ void execDraw(uint8_t regNumX, uint8_t regNumY, uint8_t height, struct Hardware 
 				pixelCurrent = chip8->displayBuffer[y + spriteByte][x + spriteBit];
 				pixelToBeDrawn = spriteData & (1 << (7 - spriteBit));
 				pixelNextState = pixelToBeDrawn ^ pixelCurrent;
+
+				chip8->displayBuffer[y + spriteByte][x + spriteBit] = pixelNextState;
 
 				if(pixelToBeDrawn && pixelCurrent)
 				{

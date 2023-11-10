@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 				nextInstruction = fetch(&chip8);
 				decode(nextInstruction, &chip8);
 				cycleTiming(&chip8); // perhaps look into ways to speed up execution
-				// updateTimers(&chip8); // order of this wrong?
+				updateTimers(&chip8); // order of this wrong?
 			}
 
 			graphicsCleanup();
