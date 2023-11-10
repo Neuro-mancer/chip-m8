@@ -16,7 +16,6 @@ bool handleInput(struct Hardware *chip8)
 			quit = true;
 			break;
 		case SDL_KEYDOWN:
-			printf("Key Press Detected\n");
 			switch(event.key.keysym.scancode)
 			{
 				case SDL_SCANCODE_1:
@@ -75,7 +74,6 @@ bool handleInput(struct Hardware *chip8)
 			}
 			break;
 		case SDL_KEYUP:
-			printf("Key Up Detected\n");
 			switch(event.key.keysym.scancode)
 			{
 				case SDL_SCANCODE_1:
