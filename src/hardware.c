@@ -44,6 +44,7 @@ void initHardwareValues(struct Hardware *chip8)
 	chip8->Timers.lastDelayTimerWrite = DELAY_TIMER_START;
 	chip8->Timers.lastSoundTimerWrite = SOUND_TIMER_START;
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
+	memset(chip8->keyBuffer, false, sizeof chip8->keyBuffer);
 	printf("Hardware values initialized with starting values\n");
 }
 
@@ -57,7 +58,7 @@ uint16_t fetch(struct Hardware *chip8)
 	opcodeByteTwo = chip8->RAM[chip8->PC + 1];
 
 	opcode = (opcodeByteOne << 8) | opcodeByteTwo;
-	printf("Opcode to be executed: 0x%04x\t|\tcurrent instruction address: 0x%04x\n", opcode, chip8->PC);
+	printf("Opcode to be executed: 0x%04x | current instruction address: 0x%04x\n", opcode, chip8->PC);
 	fflush(stdout);
 
 	chip8->PC += 2;
@@ -288,13 +289,13 @@ void updateTimers(struct Hardware *chip8)
 		chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
 	}
 
-	printf("Timers updated | Sound: %d | Delay: %d\n", chip8->Timers.sound, chip8->Timers.delay);
+	// printf("Timers updated | Sound: %d | Delay: %d\n", chip8->Timers.sound, chip8->Timers.delay);
 }
 
 void cycleTiming(struct Hardware *chip8) // times cycles to prespecified delay (see macros in instructions.h)
 {
 	int timeToSleep = CLOCK_TARGET_TIME - (SDL_GetTicks64() - chip8->Timers.lastCycleTime);
-	printf("Time to sleep: %d\n", timeToSleep);
+	// printf("Time to sleep: %d\n", timeToSleep);
 
 	if(timeToSleep > 0 && timeToSleep <= CLOCK_TARGET_TIME)
 	{

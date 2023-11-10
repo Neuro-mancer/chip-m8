@@ -7,6 +7,7 @@
 #define RAM_SIZE 4096 
 #define STACK_SIZE 16
 #define NUM_REGISTERS 16
+#define NUM_KEYS 16
 #define DISPLAY_WIDTH 64
 #define DISPLAY_HEIGHT 32
 #define PC_START 0x200
@@ -43,6 +44,7 @@ struct Hardware
 	} Timers;
 
 	bool displayBuffer[DISPLAY_HEIGHT][DISPLAY_WIDTH];
+	bool keyBuffer[NUM_KEYS];
 };
 
 void decode(uint16_t opcode, struct Hardware *chip8);

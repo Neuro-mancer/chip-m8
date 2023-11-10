@@ -2,96 +2,137 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "input.h"
+#include "hardware.h"
 
-bool handleInput(void)
+bool handleInput(struct Hardware *chip8)
 {
 	bool quit = false;
 	SDL_Event event;
 	SDL_PollEvent(&event);
 
-	while(SDL_PollEvent(&event) != 0)
+	switch(event.type)
 	{
-		if(event.type == SDL_QUIT)
-		{
+		case SDL_QUIT:
 			quit = true;
-		}
-	}
-
-	return quit;
-}
-
-bool checkKeyPress(uint8_t keyCodeChip8)
-{
-	bool keyPressed = false;
-	uint8_t keyCodePressed;
-	SDL_Event event;
-	SDL_PollEvent(&event);
-
-	while(SDL_PollEvent(&event) != 0)
-	{
-		if(event.type == SDL_KEYDOWN)
-		{
+			break;
+		case SDL_KEYDOWN:
+			printf("Key Press Detected\n");
 			switch(event.key.keysym.scancode)
 			{
 				case SDL_SCANCODE_1:
-					keyCodePressed = 0x1;
+					chip8->keyBuffer[0x1] = true;
 					break;
 				case SDL_SCANCODE_2:
-					keyCodePressed = 0x2;
+					chip8->keyBuffer[0x2] = true;
 					break;
 				case SDL_SCANCODE_3:
-					keyCodePressed = 0x3;
+					chip8->keyBuffer[0x3] = true;
 					break;
 				case SDL_SCANCODE_4:
-					keyCodePressed = 0xC;
+					chip8->keyBuffer[0xC] = true;
 					break;
 				case SDL_SCANCODE_Q:
-					keyCodePressed = 0x4;
+					chip8->keyBuffer[0x4] = true;
 					break;
 				case SDL_SCANCODE_W:
-					keyCodePressed = 0x5;
+					chip8->keyBuffer[0x5] = true;
 					break;
 				case SDL_SCANCODE_E:
-					keyCodePressed = 0x6;
+					chip8->keyBuffer[0x6] = true;
 					break;
 				case SDL_SCANCODE_R:
-					keyCodePressed = 0xD;
+					chip8->keyBuffer[0xD] = true;
 					break;
 				case SDL_SCANCODE_A:
-					keyCodePressed = 0x7;
+					chip8->keyBuffer[0x7] = true;
 					break;
 				case SDL_SCANCODE_S:
-					keyCodePressed = 0x8;
+					chip8->keyBuffer[0x8] = true;
 					break;
 				case SDL_SCANCODE_D:
-					keyCodePressed = 0x9;
+					chip8->keyBuffer[0x9] = true;
 					break;
 				case SDL_SCANCODE_F:
-					keyCodePressed = 0xE;
+					chip8->keyBuffer[0xE] = true;
 					break;
 				case SDL_SCANCODE_Z:
-					keyCodePressed = 0xA;
+					chip8->keyBuffer[0xA] = true;
 					break;
 				case SDL_SCANCODE_X:
-					keyCodePressed = 0x0;
+					chip8->keyBuffer[0x0] = true;
 					break;
 				case SDL_SCANCODE_C:
-					keyCodePressed = 0xB;
+					chip8->keyBuffer[0xB] = true;
 					break;
 				case SDL_SCANCODE_V:
-					keyCodePressed = 0xF;
+					chip8->keyBuffer[0xF] = true;
+					break;
+				case SDL_SCANCODE_ESCAPE:
+					quit = true;
 					break;
 				default:
 					break;
 			}
-		}
+			break;
+		case SDL_KEYUP:
+			printf("Key Up Detected\n");
+			switch(event.key.keysym.scancode)
+			{
+				case SDL_SCANCODE_1:
+					chip8->keyBuffer[0x1] = false;
+					break;
+				case SDL_SCANCODE_2:
+					chip8->keyBuffer[0x2] = false;
+					break;
+				case SDL_SCANCODE_3:
+					chip8->keyBuffer[0x3] = false;
+					break;
+				case SDL_SCANCODE_4:
+					chip8->keyBuffer[0xC] = false;
+					break;
+				case SDL_SCANCODE_Q:
+					chip8->keyBuffer[0x4] = false;
+					break;
+				case SDL_SCANCODE_W:
+					chip8->keyBuffer[0x5] = false;
+					break;
+				case SDL_SCANCODE_E:
+					chip8->keyBuffer[0x6] = false;
+					break;
+				case SDL_SCANCODE_R:
+					chip8->keyBuffer[0xD] = false;
+					break;
+				case SDL_SCANCODE_A:
+					chip8->keyBuffer[0x7] = false;
+					break;
+				case SDL_SCANCODE_S:
+					chip8->keyBuffer[0x8] = false;
+					break;
+				case SDL_SCANCODE_D:
+					chip8->keyBuffer[0x9] = false;
+					break;
+				case SDL_SCANCODE_F:
+					chip8->keyBuffer[0xE] = false;
+					break;
+				case SDL_SCANCODE_Z:
+					chip8->keyBuffer[0xA] = false;
+					break;
+				case SDL_SCANCODE_X:
+					chip8->keyBuffer[0x0] = false;
+					break;
+				case SDL_SCANCODE_C:
+					chip8->keyBuffer[0xB] = false;
+					break;
+				case SDL_SCANCODE_V:
+					chip8->keyBuffer[0xF] = false;
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
 	}
 
-	if(keyCodeChip8 == keyCodePressed)
-	{
-		keyPressed = true;
-	}
-
-	return keyPressed;
+	return quit;
 }
-

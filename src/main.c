@@ -35,11 +35,11 @@ int main(int argc, char **argv)
 
 			while(!quit)
 			{
+				quit = handleInput(&chip8); // look into making an enum which holds state of emulator?
 				nextInstruction = fetch(&chip8);
 				decode(nextInstruction, &chip8);
 				cycleTiming(&chip8); // perhaps look into ways to speed up execution
-				updateTimers(&chip8); // order of this wrong?
-				quit = handleInput();
+				// updateTimers(&chip8); // order of this wrong?
 			}
 
 			graphicsCleanup();

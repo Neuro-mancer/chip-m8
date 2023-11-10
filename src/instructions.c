@@ -1,7 +1,6 @@
 #include "instructions.h"
 #include "hardware.h"
 #include "graphics.h"
-#include "input.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -12,7 +11,6 @@ void execClearDisplay(struct Hardware *chip8)
 {
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
 	clearScreen();
-	printf("Clear Screen\n");
 }
 
 void execRet(struct Hardware *chip8)
@@ -181,18 +179,12 @@ void execDraw(uint8_t regNumX, uint8_t regNumY, uint8_t height, struct Hardware 
 
 void execSkipOnKeyPress(uint8_t regNum, struct Hardware *chip8)
 {
-	if(checkKeyPress(chip8->V[regNum]))
-	{
-		chip8->PC += 2;
-	}
+	chip8->PC += chip8->keyBuffer[chip8->V[regNum]] ? 2 : 0;
 }
 
 void execSkipOnKeyNotPressed(uint8_t regNum, struct Hardware *chip8)
 {
-	if(!checkKeyPress(chip8->V[regNum]))
-	{
-		chip8->PC += 2;
-	}
+	chip8->PC += !(chip8->keyBuffer[chip8->V[regNum]]) ? 2 : 0;
 }
 
 void execSetRegToTimerVal(uint8_t regNum, struct Hardware *chip8)
@@ -222,71 +214,15 @@ void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8)
 
 void execGetKey(uint8_t regNum, struct Hardware *chip8)
 {
-	if(!checkKeyPress(chip8->V[regNum]))
-	{
-		chip8->PC -= 2;
-	}
+	chip8->PC -= chip8->keyBuffer[chip8->V[regNum]] ? 0 : 2;
 }
 
 void execSetIndexToFont(uint8_t regNum, struct Hardware *chip8)
 {
 	uint8_t fontChar = chip8->V[regNum] & 0x0F;
 	uint16_t fontMemLocation;
-	switch(fontChar)
-	{
-		case 0x0:
-			fontMemLocation = 0x50;
-			break;
-		case 0x1:
-			fontMemLocation = 0x55;
-			break;
-		case 0x2:
-			fontMemLocation = 0x5A;
-			break;
-		case 0x3:
-			fontMemLocation = 0x5F;
-			break;
-		case 0x4:
-			fontMemLocation = 0x64;
-			break;
-		case 0x5:
-			fontMemLocation = 0x69;
-			break;
-		case 0x6:
-			fontMemLocation = 0x6E;
-			break;
-		case 0x7:
-			fontMemLocation = 0x73;
-			break;
-		case 0x8:
-			fontMemLocation = 0x78;
-			break;
-		case 0x9:
-			fontMemLocation = 0x7D;
-			break;
-		case 0xA:
-			fontMemLocation = 0x82;
-			break;
-		case 0xB:
-			fontMemLocation = 0x87;
-			break;
-		case 0xC:
-			fontMemLocation = 0x8C;
-			break;
-		case 0xD:
-			fontMemLocation = 0x91;
-			break;
-		case 0xE:
-			fontMemLocation = 0x96;
-			break;
-		case 0xF:
-			fontMemLocation = 0x9B;
-			break;
-		default:
-			fontMemLocation = 0x00;
-			break;
-	}
 
+	fontMemLocation = 0x50 + (fontChar * 5);
 	chip8->I = fontMemLocation;
 }
 
