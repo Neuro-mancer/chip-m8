@@ -251,56 +251,28 @@ bool loadROMIntoMem(char *fileName, struct Hardware *chip8)
 
 void updateTimers(struct Hardware *chip8)
 {
-	int ticksElapsedDelay;
-	int ticksElapsedSound;
-	int newTimerVal;
+	static uint8_t cyclesSinceLastTick = 0;
 
-	if(chip8->Timers.delay > 0)
+	cyclesSinceLastTick++;
+
+	if(cyclesSinceLastTick == 8)
 	{
-		ticksElapsedDelay = (SDL_GetTicks64() - chip8->Timers.lastDelayTimerWrite) / TIMER_TARGET_TIME;
-		newTimerVal = (int)(chip8->Timers.delay) - ticksElapsedDelay;
-
-		if(newTimerVal >= 0)
-		{
-			chip8->Timers.delay = newTimerVal;
-		}
-		else
-		{
-			chip8->Timers.delay = 0;
-		}
-
-		chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
+		cyclesSinceLastTick = 0;
+		chip8->Timers.delay -= (chip8->Timers.delay > 0) ? 1 : 0;
+		chip8->Timers.sound -= (chip8->Timers.sound > 0) ? 1 : 0;
 	}
-	else if(chip8->Timers.sound > 0)
-	{
-		ticksElapsedSound = (SDL_GetTicks64() - chip8->Timers.lastSoundTimerWrite) / TIMER_TARGET_TIME;
-		newTimerVal = (int)(chip8->Timers.delay) - ticksElapsedSound;
-
-		if(newTimerVal >= 0)
-		{
-			chip8->Timers.sound = newTimerVal;
-		}
-		else
-		{
-			chip8->Timers.sound = 0;
-
-		}
-
-		chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
-	}
-
-	// printf("Timers updated | Sound: %d | Delay: %d\n", chip8->Timers.sound, chip8->Timers.delay);
 }
 
 void cycleTiming(struct Hardware *chip8) // times cycles to prespecified delay (see macros in instructions.h)
 {
-	int timeToSleep = CLOCK_TARGET_TIME - (SDL_GetTicks64() - chip8->Timers.lastCycleTime);
-	// printf("Time to sleep: %d\n", timeToSleep);
+	uint32_t timeBetween = (SDL_GetTicks() - chip8->Timers.lastCycleTime);
+	int32_t timeToSleep = CLOCK_TARGET_TIME - timeBetween;
 
 	if(timeToSleep > 0 && timeToSleep <= CLOCK_TARGET_TIME)
 	{
 		SDL_Delay(timeToSleep);
 	}
 
-	chip8->Timers.lastCycleTime = SDL_GetTicks64();
+	updateTimers(chip8); // could be improved with multithreading, for now this works!
+	chip8->Timers.lastCycleTime = SDL_GetTicks();
 }

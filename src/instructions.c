@@ -181,7 +181,7 @@ void execDraw(uint8_t regNumX, uint8_t regNumY, uint8_t height, struct Hardware 
 
 void execSkipOnKeyPress(uint8_t regNum, struct Hardware *chip8)
 {
-	chip8->PC += chip8->keyBuffer[chip8->V[regNum]] ? 2 : 0;
+	chip8->PC += chip8->keyBuffer[chip8->V[regNum]] ? 2 : 0; // think about changing this and similar to if statement?
 }
 
 void execSkipOnKeyNotPressed(uint8_t regNum, struct Hardware *chip8)
@@ -197,11 +197,13 @@ void execSetRegToTimerVal(uint8_t regNum, struct Hardware *chip8)
 void execSetDelayTimerToReg(uint8_t regNum, struct Hardware *chip8)
 {
 	chip8->Timers.delay = chip8->V[regNum];
+	chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
 }
 
 void execSetSoundTimerToReg(uint8_t regNum, struct Hardware *chip8)
 {
 	chip8->Timers.sound = chip8->V[regNum];
+	chip8->Timers.lastSoundTimerWrite = SDL_GetTicks64();
 }
 
 void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8)
@@ -216,7 +218,19 @@ void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8)
 
 void execGetKey(uint8_t regNum, struct Hardware *chip8)
 {
-	chip8->PC -= chip8->keyBuffer[chip8->V[regNum]] ? 0 : 2;
+	bool keyPressed = false;
+
+	for(int key = 0; key < NUM_KEYS; key++)
+	{
+		if(chip8->keyBuffer[key])
+		{
+			chip8->V[regNum] = key;
+			keyPressed = true;
+			break;
+		}
+	}
+
+	chip8->PC -= keyPressed ? 0 : 2;
 }
 
 void execSetIndexToFont(uint8_t regNum, struct Hardware *chip8)
@@ -241,6 +255,7 @@ void execConvertIntToBCD(uint8_t regNum, struct Hardware *chip8)
 
 // note: these instructions follow the modern interpreter routine storing
 // temporary index in for loop, instead of incrementing the I addr register
+// could be an issue with the quirks?
 void execStoreRegInMem(uint8_t regNum, struct Hardware *chip8)
 {
 	for(int reg = 0; reg <= regNum; reg++)

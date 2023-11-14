@@ -38,9 +38,9 @@ struct Hardware
 	{
 		uint8_t delay;
 		uint8_t sound;
-		int lastCycleTime; // stores time elasped since last cycle
-		int lastDelayTimerWrite;
-		int lastSoundTimerWrite;
+		uint32_t lastCycleTime; // stores time elasped since last cycle
+		uint32_t lastDelayTimerWrite;
+		uint32_t lastSoundTimerWrite;
 	} Timers;
 
 	bool displayBuffer[DISPLAY_HEIGHT][DISPLAY_WIDTH];
