@@ -5,6 +5,6 @@
 #include <stdbool.h>
 #include "hardware.h"
 
-bool handleInput(struct Hardware *chip8);
+void handleInput(struct Hardware *chip8);
 
 #endif // INPUT_H

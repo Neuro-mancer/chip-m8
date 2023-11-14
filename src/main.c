@@ -9,12 +9,12 @@
 
 int main(int argc, char **argv)
 {
-	bool quit = false;
 	int nextInstruction;
 	struct Hardware chip8;
 
 	// init 4KB chip-8 memory and load fonts into memory
 	uint8_t *RAM = (uint8_t *)malloc(RAM_SIZE * sizeof(uint8_t));
+
 	if(RAM == NULL)
 	{
 		printf("Failed to allocate RAM memory to heap!\n");
@@ -24,6 +24,7 @@ int main(int argc, char **argv)
 		chip8.RAM = RAM;
 		initHardwareValues(&chip8);
 		loadFontIntoMem(chip8.RAM);
+
 		if(!loadROMIntoMem(argv[1], &chip8))
 		{
 			printf("Failed to load ROM into memory!\n");
@@ -32,13 +33,22 @@ int main(int argc, char **argv)
 		{
 			graphicsInit();
 			clearScreen();
+			chip8.STATE = EXECUTE;
 
-			while(!quit)
+			while(chip8.STATE != QUIT)
 			{
-				quit = handleInput(&chip8); // look into making an enum which holds state of emulator?
+				handleInput(&chip8);
+
+				if(chip8.STATE == PAUSE)
+				{
+					SDL_Delay(TIMER_TARGET_TIME);
+					continue;
+				}
+
 				nextInstruction = fetch(&chip8);
 				decode(nextInstruction, &chip8);
-				cycleTiming(&chip8);
+				cycleTiming(&chip8); // NOTE TO SELF: CHANGE CYCLE TIMING
+				// TO USE PERFORMANCE COUNTER INSTEAD OF SDL GET TICKS
 			}
 
 			graphicsCleanup();

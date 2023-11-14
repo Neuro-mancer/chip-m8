@@ -45,7 +45,6 @@ void initHardwareValues(struct Hardware *chip8)
 	chip8->Timers.lastSoundTimerWrite = SOUND_TIMER_START;
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
 	memset(chip8->keyBuffer, false, sizeof chip8->keyBuffer);
-	printf("Hardware values initialized with starting values\n");
 }
 
 uint16_t fetch(struct Hardware *chip8)
@@ -58,7 +57,7 @@ uint16_t fetch(struct Hardware *chip8)
 	opcodeByteTwo = chip8->RAM[chip8->PC + 1];
 
 	opcode = (opcodeByteOne << 8) | opcodeByteTwo;
-	printf("Opcode to be executed: 0x%04x | current instruction address: 0x%04x\n", opcode, chip8->PC);
+	// printf("Opcode to be executed: 0x%04x | current instruction address: 0x%04x\n", opcode, chip8->PC);
 	fflush(stdout);
 
 	chip8->PC += 2;

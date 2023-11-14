@@ -45,6 +45,8 @@ struct Hardware
 
 	bool displayBuffer[DISPLAY_HEIGHT][DISPLAY_WIDTH];
 	bool keyBuffer[NUM_KEYS];
+
+	enum {EXECUTE, PAUSE, QUIT} STATE;
 };
 
 void decode(uint16_t opcode, struct Hardware *chip8);

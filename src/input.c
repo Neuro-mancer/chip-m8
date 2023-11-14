@@ -4,16 +4,15 @@
 #include "input.h"
 #include "hardware.h"
 
-bool handleInput(struct Hardware *chip8)
+void handleInput(struct Hardware *chip8)
 {
-	bool quit = false;
 	SDL_Event event;
 	SDL_PollEvent(&event);
 
 	switch(event.type)
 	{
 		case SDL_QUIT:
-			quit = true;
+			chip8->STATE = QUIT;
 			break;
 		case SDL_KEYDOWN:
 			switch(event.key.keysym.scancode)
@@ -67,7 +66,10 @@ bool handleInput(struct Hardware *chip8)
 					chip8->keyBuffer[0xF] = true;
 					break;
 				case SDL_SCANCODE_ESCAPE:
-					quit = true;
+					chip8->STATE = (chip8->STATE == EXECUTE) ? PAUSE : EXECUTE;
+					break;
+				case SDL_SCANCODE_SPACE:
+					chip8->STATE = QUIT;
 					break;
 				default:
 					break;
@@ -131,6 +133,4 @@ bool handleInput(struct Hardware *chip8)
 		default:
 			break;
 	}
-
-	return quit;
 }

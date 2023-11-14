@@ -41,7 +41,7 @@ bool graphicsInit(void)
 
 void clearScreen(void)
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black
+	SDL_SetRenderDrawColor(renderer, 0xB8, 0xC2, 0xB9, 255); // background
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
 }
@@ -62,11 +62,11 @@ void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
 	
 	if(pixelOn)
 	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // white
+		SDL_SetRenderDrawColor(renderer, 0x38, 0x2b, 0x26, 255); // foreground
 	}
 	else
 	{
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black
+		SDL_SetRenderDrawColor(renderer, 0xB8, 0xC2, 0xB9, 255); // background
 	}
 
 	SDL_RenderFillRect(renderer, &currentPixel);
