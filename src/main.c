@@ -7,6 +7,8 @@
 #include "graphics.h"
 #include "input.h"
 
+#define PAUSE_IDLE_TIME 16
+
 int main(int argc, char **argv)
 {
 	int nextInstruction;
@@ -41,7 +43,7 @@ int main(int argc, char **argv)
 
 				if(chip8.STATE == PAUSE)
 				{
-					SDL_Delay(TIMER_TARGET_TIME);
+					SDL_Delay(PAUSE_IDLE_TIME);
 					continue;
 				}
 
