@@ -29,13 +29,17 @@ int main(int argc, char **argv)
 
 		if(!loadROMIntoMem(argv[1], &chip8))
 		{
-			printf("Failed to load ROM into memory!\n");
+			return -1;
 		}
 		else
 		{
 			graphicsInit();
 			clearScreen();
+			loadSound();
+		
 			chip8.STATE = EXECUTE;
+			printf("CHIP-M8 Successfully loaded!");
+			playSound();
 
 			while(chip8.STATE != QUIT)
 			{
@@ -58,5 +62,6 @@ int main(int argc, char **argv)
 		}
 
 	}
+
 	return 0;
 }

@@ -1,16 +1,17 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "graphics.h"
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
+Mix_Chunk *tone = NULL;
 
-bool graphicsInit(void)
-{
+bool graphicsInit(void) {
 	bool success = true;
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		printf("SDL could not be initalized. SDL_Error: %s\n", SDL_GetError());
 		success = false;
@@ -33,12 +34,41 @@ bool graphicsInit(void)
 				printf("Unable to create renderer. SDL Error: %s\n", SDL_GetError());
 				success = false;
 			}
+			else
+			{
+				if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				{
+					printf("SDL_mixer was unable to initialize. SDL_mixer Error: %s\n", Mix_GetError());
+					success = false;
+				}
+			}
 		}
 	}
 	
 	return success;
 }
 
+bool loadSound(void)
+{
+	bool success = true;
+
+	tone = Mix_LoadWAV("sound_fx/tone.wav");
+
+	if(tone == NULL)
+	{
+		success = false;
+		printf("Failed to load sound_fx/tone.wav\n");
+	}
+
+	Mix_MasterVolume(20);
+
+	return success;
+}
+
+void playSound(void)
+{
+	Mix_PlayChannel(0, tone, 0);
+}
 void clearScreen(void)
 {
 	SDL_SetRenderDrawColor(renderer, 0xB8, 0xC2, 0xB9, 255); // background
@@ -58,8 +88,6 @@ void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
 		SCREEN_SCALE,	
 	};
 
-	// consider optimizing this function by making sure it doesn't redraw if a pixel is *ALREADY* that color??
-	
 	if(pixelOn)
 	{
 		SDL_SetRenderDrawColor(renderer, 0x38, 0x2b, 0x26, 255); // foreground
@@ -75,7 +103,9 @@ void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
 
 void graphicsCleanup(void)
 {
+	Mix_FreeChunk(tone);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	Mix_Quit();
 	SDL_Quit();
 }

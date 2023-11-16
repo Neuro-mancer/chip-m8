@@ -4,6 +4,7 @@
 #include <string.h>
 #include "hardware.h"
 #include "instructions.h"
+#include "graphics.h"
 
 void stackPush(uint16_t item, struct Hardware *chip8)
 {
@@ -226,6 +227,8 @@ bool loadROMIntoMem(char *fileName, struct Hardware *chip8)
 	int memByte = PC_START;
 	uint8_t byteData;
 
+	// add if statement that checks if filename is valid then runs so it will no longer segfault
+
 	ROM = fopen(fileName, "rb");
 
 	if(ROM == NULL)
@@ -259,6 +262,11 @@ void updateTimers(struct Hardware *chip8)
 		cyclesSinceLastTick = 0;
 		chip8->Timers.delay -= (chip8->Timers.delay > 0) ? 1 : 0;
 		chip8->Timers.sound -= (chip8->Timers.sound > 0) ? 1 : 0;
+	}
+
+	if(chip8->Timers.sound > 0)
+	{
+		playSound();
 	}
 }
 

@@ -11,5 +11,7 @@ bool graphicsInit(void);
 void graphicsCleanup(void);
 void clearScreen(void);
 void drawPixel(unsigned int x, unsigned int y, bool pixelOn);
+bool loadSound(void);
+void playSound(void);
 
 #endif // GRAPHICS_H
