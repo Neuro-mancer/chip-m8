@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 			loadSound();
 		
 			chip8.STATE = EXECUTE;
-			printf("CHIP-M8 Successfully loaded!");
+			printf("CHIP-M8 Successfully loaded!\n");
 			playSound();
 
 			while(chip8.STATE != QUIT)
