@@ -29,6 +29,7 @@ int main(int argc, char **argv)
 
 		if(!loadROMIntoMem(argv[1], &chip8))
 		{
+			printf("Error: Unable to read rom, stopping program.\n");
 			return -1;
 		}
 		else

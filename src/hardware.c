@@ -245,9 +245,10 @@ bool loadROMIntoMem(char *fileName, struct Hardware *chip8)
 			chip8->RAM[memByte] = byteData;
 			memByte++;
 		}
+
+		fclose(ROM);
 	}
 
-	fclose(ROM);
 	return success;
 }
 
