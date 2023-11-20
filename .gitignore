@@ -1,5 +1,6 @@
 *.ch8
 *.txt
 *.rom
+roms
 testdir
 emulator
