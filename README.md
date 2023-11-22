@@ -163,52 +163,20 @@ give the controls as certain hexadecimal values. For my emulator the bindings
 are analogous to the COSMAC keypad positions. Here is a diagram of the controls
 on a QWERTY keyboard and its analogous COSMAC hex keypad:
 
-EMULATOR CONTROLS:
+Controls:
+```
+EMULATOR                      COSMAC
+-----------------  -----------------
+| 1 | 2 | 3 | 4 |  | 1 | 2 | 3 | C |
+-----------------  -----------------
+| Q | W | E | R |  | 4 | 5 | 6 | D |
+-----------------  -----------------
+| A | S | D | F |  | 7 | 8 | 9 | E |
+-----------------  -----------------
+| Z | X | C | V |  | A | 0 | B | F |
+-----------------  -----------------
 
-\---------------------
-
-| 1 | 2 | 3 | 4 |
-
-\---------------------
-
-| Q | W | E | R |
-
-\---------------------
-
-| A | S | D | F |
-
-\---------------------
-
-
-| Z | X | C | V |
-
-\---------------------
-
-
-ANALOGOUS COSMAC KEYPAD:
-
-\---------------------
-
-
-| 1 | 2 | 3 | C |
-
-\---------------------
-
-
-| 4 | 5 | 6 | D |
-
-\---------------------
-
-
-| 7 | 8 | 9 | E |
-
-\---------------------
-
-
-| A | 0 | B | F |
-
-\---------------------
-
+```
 
 Different games will have different control schemes; however, I have noticed
 that many modern games use the keys Q, W, and E.
