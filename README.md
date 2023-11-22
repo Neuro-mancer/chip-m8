@@ -1,15 +1,17 @@
 # CHIP-M8 a CHIP-8 Emulator
 
 ---
-
 This is my repository for Chip-M8, a CHIP-8 emulator written from scratch in C
 with [SDL (Simple Direct Media Layer)](https://www.libsdl.org/). It uses SDL to
 manage the graphics, sound, and keyboard input and everything else is handled
-using the standard C library. I plan on adding more features to this in the
+using the standard C library. 
+
+I plan on adding more features to this in the
 future and optimizing it as much as possible. It has been a great way to
 exercise my skills and also a pleasure to create as someone who is intrigued
-about computer engineering, computer science, and programming in general. I
-undertook this project because I wanted an excuse to brush up on my C skills and
+about computer engineering, computer science, and programming in general.
+
+I undertook this project because I wanted an excuse to brush up on my C skills and
 finally give myself an excuse to learn the basics of SDL and emulation. I am
 this repository's sole maintainer.
 
@@ -27,7 +29,9 @@ microcomputers in the 1970s. These computers used the same 8-bit processor, the
 Weisbecker). It was intended to make programming video games easier for these
 computers, but continues to be used by hobbyists because of its simplicity. The
 programs run on a "virtual machine"/"emulator" and functioned as a friendlier
-abstraction to the RCA 1802's machine language. People have also made
+abstraction to the RCA 1802's machine language. 
+
+People have also made
 extensions/changes to the CHIP-8 language, so various similar but distinct
 versions exist, including (but not limited to) SUPER-CHIP and XO-CHIP. The
 various quirks of the language help to make game development easier, especially
@@ -48,7 +52,9 @@ and display in the original CHIP-8. CHIP-8 contains a 16-bit program counter to
 hold the address of the next instruction to be executed (in practice only 12
 bits are ever used, although I've heard some original CHIP-8 games do access
 more memory). Program control flow is generally altered via an unconditional
-jump to a 12-bit address specified. The only other jumps are "skip"
+jump to a 12-bit address specified. 
+
+The only other jumps are "skip"
 instructions, which simply increment the PC an extra address if certain
 conditions/flags are met. The emulation follows the general flow of a CPU, that
 is, it fetches the instruction from the address in the PC, the instruction is
@@ -57,7 +63,9 @@ decoded, and the instruction is executed, and then PC is incremented. There are
 used to store flags), one 16-bit address register used to access memory
 locations (generally for data like sprites and fonts), and a stack used to hold
 16-bit return addresses (which varies in total size from implementation to
-implementation). The keyboard is 16 keys, corresponding to the hex keypad on the
+implementation). 
+
+The keyboard is 16 keys, corresponding to the hex keypad on the
 original COSMAC VIP. The CHIP-8 also has two 8-bit timer registers which
 decrement at a rate of 60 Hertz, one for sound (which beeps unless zero) and a
 "delay" timer for timing in programs. The display is simply 64x32 pixels and
@@ -124,10 +132,13 @@ process for acquiring the dependencies on your distribution:
 ### Cloning and Running
 
 Before running it, you need to clone and make the project: 
+
 `git clone https://github.com/Neuro-mancer/chip-m8`
+
 `cd chip-m8 && make`
 
 To run, simply type: 
+
 `./emulator <CHIP-8 ROM File>`
 
 
@@ -153,25 +164,42 @@ are analogous to the COSMAC keypad positions. Here is a diagram of the controls
 on a QWERTY keyboard and its analogous COSMAC hex keypad:
 
 EMULATOR CONTROLS:
+
 \----------------
+
 | 1 | 2 | 3 | 4 |
+
 \----------------
+
 | Q | W | E | R |
+
 \----------------
+
 | A | S | D | F |
+
 \----------------
+
 | Z | X | C | V |
+
 \----------------
 
 ANALOGOUS COSMAC KEYPAD:
+
 \----------------
+
 | 1 | 2 | 3 | C |
+
 \----------------
+
 | 4 | 5 | 6 | D |
+
 \----------------
+
 | 7 | 8 | 9 | E |
 \----------------
+
 | A | 0 | B | F |
+
 \----------------
 
 Different games will have different control schemes; however, I have noticed
