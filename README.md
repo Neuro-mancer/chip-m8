@@ -1,6 +1,5 @@
 # CHIP-M8 a CHIP-8 Emulator
 
----
 This is my repository for Chip-M8, a CHIP-8 emulator written from scratch in C
 with [SDL (Simple Direct Media Layer)](https://www.libsdl.org/). It uses SDL to
 manage the graphics, sound, and keyboard input and everything else is handled
@@ -18,7 +17,6 @@ this repository's sole maintainer.
 
 ## What is CHIP-8?
 
----
 
 ### CHIP-8 Overview and History
 
@@ -79,7 +77,6 @@ sprite collision detection much easier for the game developer!
 
 ## CHIP-M8 Features and Specifications
 
----
 
 ### Virtual Machine Specifications
 
@@ -98,7 +95,6 @@ sprite collision detection much easier for the game developer!
 
 ## Planned Features
 
----
 
 - Add support for common CHIP-8 extensions (SUPER-CHIP and XO-CHIP)
 - Add adjustable cycle-timing speeds
@@ -113,7 +109,6 @@ sprite collision detection much easier for the game developer!
 
 ## Installation
 
-___
 
 ### Dependencies
 
@@ -144,7 +139,6 @@ To run, simply type:
 
 ## How to Use
 
----
 
 ### Finding CHIP-8 "ROMs"
 First, find some CHIP-8 ROMs to play. Any will suffice, although it should be
