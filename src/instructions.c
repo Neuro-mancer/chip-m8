@@ -228,7 +228,7 @@ void execGetKey(uint8_t regNum, struct Hardware *chip8)
 			chip8->V[regNum] = key;
 			keyPressed = true;
 
-			while(chip8->V[regNum])
+			while(chip8->keyBuffer[chip8->V[regNum]])
 			{
 				handleInput(chip8);
 			}

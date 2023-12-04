@@ -45,14 +45,16 @@ int main(int argc, char **argv)
 
 			while(chip8.STATE != QUIT)
 			{
+				chip8.Timers.lastCycleTime = SDL_GetPerformanceCounter();
+
 				handleInput(&chip8);
 
 				if(chip8.STATE == PAUSE)
 				{
-					printf("Emulation ")
 					SDL_Delay(PAUSE_IDLE_TIME);
 					continue;
 				}
+
 
 				nextInstruction = fetch(&chip8);
 				decode(nextInstruction, &chip8);

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -273,14 +274,17 @@ void updateTimers(struct Hardware *chip8)
 
 void cycleTiming(struct Hardware *chip8) // times cycles to prespecified delay (see macros in instructions.h)
 {
-	uint32_t timeBetween = (SDL_GetTicks() - chip8->Timers.lastCycleTime);
-	int32_t timeToSleep = CLOCK_TARGET_TIME - timeBetween;
+	// time elapsed is in seconds
+	float timeElapsed = (SDL_GetPerformanceCounter() - chip8->Timers.lastCycleTime) / ((float)SDL_GetPerformanceFrequency());
+	float timeToSleepPrecise = CLOCK_TARGET_TIME - (timeElapsed * 1000);
+	
+	// must convert to milliseconds
+	int64_t timeToSleep = round(timeToSleepPrecise);
 
-	if(timeToSleep > 0 && timeToSleep <= CLOCK_TARGET_TIME)
+	if(timeToSleepPrecise > 0 && timeToSleepPrecise <= CLOCK_TARGET_TIME)
 	{
 		SDL_Delay(timeToSleep);
 	}
 
 	updateTimers(chip8); // could be improved with multithreading, for now this works!
-	chip8->Timers.lastCycleTime = SDL_GetTicks();
 }
