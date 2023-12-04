@@ -1,4 +1,5 @@
 #include "instructions.h"
+#include "input.h"
 #include "hardware.h"
 #include "graphics.h"
 #include <string.h>
@@ -226,6 +227,11 @@ void execGetKey(uint8_t regNum, struct Hardware *chip8)
 		{
 			chip8->V[regNum] = key;
 			keyPressed = true;
+
+			while(chip8->V[regNum])
+			{
+				handleInput(chip8);
+			}
 			break;
 		}
 	}

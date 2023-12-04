@@ -38,8 +38,9 @@ int main(int argc, char **argv)
 			clearScreen();
 			loadSound();
 		
-			chip8.STATE = EXECUTE;
+			chip8.STATE = PAUSE;
 			printf("CHIP-M8 Successfully loaded!\n");
+			printf("Note: CHIP-M8 defaults to a paused state upon loading a rom, unpause/pause with the Escape button\n");
 			playSound();
 
 			while(chip8.STATE != QUIT)
@@ -48,6 +49,7 @@ int main(int argc, char **argv)
 
 				if(chip8.STATE == PAUSE)
 				{
+					printf("Emulation ")
 					SDL_Delay(PAUSE_IDLE_TIME);
 					continue;
 				}
