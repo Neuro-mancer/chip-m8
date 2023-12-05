@@ -73,7 +73,6 @@ void clearScreen(void)
 {
 	SDL_SetRenderDrawColor(renderer, 0xB8, 0xC2, 0xB9, 255); // background
 	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
 }
 
 void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
@@ -98,7 +97,6 @@ void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
 	}
 
 	SDL_RenderFillRect(renderer, &currentPixel);
-	SDL_RenderPresent(renderer);
 }
 
 void graphicsCleanup(void)

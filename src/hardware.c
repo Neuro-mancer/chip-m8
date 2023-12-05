@@ -42,9 +42,7 @@ void initHardwareValues(struct Hardware *chip8)
 	chip8->Stack.SP = STACK_START;
 	chip8->Timers.delay = DELAY_TIMER_START;
 	chip8->Timers.sound = SOUND_TIMER_START;
-	chip8->Timers.lastCycleTime = CYCLE_TIMER_START;
-	chip8->Timers.lastDelayTimerWrite = DELAY_TIMER_START;
-	chip8->Timers.lastSoundTimerWrite = SOUND_TIMER_START;
+	chip8->Timers.lastFrameTime = CYCLE_TIMER_START;
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
 	memset(chip8->keyBuffer, false, sizeof chip8->keyBuffer);
 }
@@ -255,16 +253,8 @@ bool loadROMIntoMem(char *fileName, struct Hardware *chip8)
 
 void updateTimers(struct Hardware *chip8)
 {
-	static uint8_t cyclesSinceLastTick = 0;
-
-	cyclesSinceLastTick++;
-
-	if(cyclesSinceLastTick == 8)
-	{
-		cyclesSinceLastTick = 0;
-		chip8->Timers.delay -= (chip8->Timers.delay > 0) ? 1 : 0;
-		chip8->Timers.sound -= (chip8->Timers.sound > 0) ? 1 : 0;
-	}
+	chip8->Timers.delay -= (chip8->Timers.delay > 0) ? 1 : 0;
+	chip8->Timers.sound -= (chip8->Timers.sound > 0) ? 1 : 0;
 
 	if(chip8->Timers.sound > 0)
 	{
@@ -275,16 +265,17 @@ void updateTimers(struct Hardware *chip8)
 void cycleTiming(struct Hardware *chip8) // times cycles to prespecified delay (see macros in instructions.h)
 {
 	// time elapsed is in seconds
-	float timeElapsed = (SDL_GetPerformanceCounter() - chip8->Timers.lastCycleTime) / ((float)SDL_GetPerformanceFrequency());
-	float timeToSleepPrecise = CLOCK_TARGET_TIME - (timeElapsed * 1000);
+	float timeElapsed = (SDL_GetPerformanceCounter() - chip8->Timers.lastFrameTime) / ((float)SDL_GetPerformanceFrequency());
+	float timeToSleepPrecise = TIMER_TARGET_TIME - (timeElapsed * 1000);
 	
 	// must convert to milliseconds
 	int64_t timeToSleep = round(timeToSleepPrecise);
 
-	if(timeToSleepPrecise > 0 && timeToSleepPrecise <= CLOCK_TARGET_TIME)
+	if(timeToSleepPrecise > 0 && timeToSleepPrecise <= TIMER_TARGET_TIME)
 	{
 		SDL_Delay(timeToSleep);
 	}
 
-	updateTimers(chip8); // could be improved with multithreading, for now this works!
+	updateTimers(chip8); 
+	SDL_RenderPresent(renderer);
 }

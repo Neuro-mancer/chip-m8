@@ -17,7 +17,6 @@
 #define CYCLE_TIMER_START 0
 #define MAX_ROM_SIZE 3584
 #define CPU_CLOCK_SPEED 500 // HZ
-#define CLOCK_TARGET_TIME (1000 / CPU_CLOCK_SPEED) // in milliseconds
 #define TIMER_SPEED 60 // HZ
 #define TIMER_TARGET_TIME (1000 / TIMER_SPEED) // in milliseconds
 
@@ -38,9 +37,7 @@ struct Hardware
 	{
 		uint8_t delay;
 		uint8_t sound;
-		uint64_t lastCycleTime; // stores time elasped since last cycle
-		uint32_t lastDelayTimerWrite;
-		uint32_t lastSoundTimerWrite;
+		uint64_t lastFrameTime; // stores time elasped since last cycle
 	} Timers;
 
 	bool displayBuffer[DISPLAY_HEIGHT][DISPLAY_WIDTH];

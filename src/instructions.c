@@ -198,13 +198,11 @@ void execSetRegToTimerVal(uint8_t regNum, struct Hardware *chip8)
 void execSetDelayTimerToReg(uint8_t regNum, struct Hardware *chip8)
 {
 	chip8->Timers.delay = chip8->V[regNum];
-	chip8->Timers.lastDelayTimerWrite = SDL_GetTicks64();
 }
 
 void execSetSoundTimerToReg(uint8_t regNum, struct Hardware *chip8)
 {
 	chip8->Timers.sound = chip8->V[regNum];
-	chip8->Timers.lastSoundTimerWrite = SDL_GetTicks64();
 }
 
 void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8)

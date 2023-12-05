@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 		{
 			graphicsInit();
 			clearScreen();
+			SDL_RenderPresent(renderer);
 			loadSound();
 		
 			chip8.STATE = PAUSE;
@@ -45,7 +46,7 @@ int main(int argc, char **argv)
 
 			while(chip8.STATE != QUIT)
 			{
-				chip8.Timers.lastCycleTime = SDL_GetPerformanceCounter();
+				chip8.Timers.lastFrameTime = SDL_GetPerformanceCounter();
 
 				handleInput(&chip8);
 
@@ -55,11 +56,13 @@ int main(int argc, char **argv)
 					continue;
 				}
 
+				for(int i = 0; i < CPU_CLOCK_SPEED / 60; i++)
+				{
+					nextInstruction = fetch(&chip8);
+					decode(nextInstruction, &chip8);
+				}
 
-				nextInstruction = fetch(&chip8);
-				decode(nextInstruction, &chip8);
-				cycleTiming(&chip8); // NOTE TO SELF: CHANGE CYCLE TIMING
-				// TO USE PERFORMANCE COUNTER INSTEAD OF SDL GET TICKS
+				cycleTiming(&chip8);
 			}
 
 			graphicsCleanup();

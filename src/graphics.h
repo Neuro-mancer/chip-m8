@@ -7,6 +7,8 @@
 #define SCREEN_HEIGHT 512
 #define SCREEN_SCALE 16
 
+extern SDL_Renderer *renderer;
+
 bool graphicsInit(void);
 void graphicsCleanup(void);
 void clearScreen(void);
