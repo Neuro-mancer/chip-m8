@@ -90,6 +90,7 @@ sprite collision detection much easier for the game developer!
 
 - Written in C with SDL
 - Pause/Play emulation with Escape key
+- Adjust emulation speed by pressing up arrow and down arrow on keyboard
 - Will compile and run on GNU/Linux
 
 
@@ -97,14 +98,13 @@ sprite collision detection much easier for the game developer!
 
 
 - Add support for common CHIP-8 extensions (SUPER-CHIP and XO-CHIP)
-- Add adjustable cycle-timing speeds
+- ~~Add adjustable emulation speed~~
 - Ability for the user to change the monochrome display colors to suit their
   fancy
 - Support for additional resolutions
 - Multithreading
 - Debugging Mode
 - Windows support?
-- Change emulator keybindings
 
 
 ## Installation
