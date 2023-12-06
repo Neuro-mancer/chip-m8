@@ -42,7 +42,6 @@ int main(int argc, char **argv)
 			chip8.STATE = PAUSE;
 			printf("CHIP-M8 Successfully loaded!\n");
 			printf("Note: CHIP-M8 defaults to a paused state upon loading a rom, unpause/pause with the Escape button\n");
-			playSound();
 
 			while(chip8.STATE != QUIT)
 			{
@@ -56,7 +55,7 @@ int main(int argc, char **argv)
 					continue;
 				}
 
-				for(int i = 0; i < CPU_CLOCK_SPEED / 60; i++)
+				for(int i = 0; i < chip8.emulationSpeed / 60; i++)
 				{
 					nextInstruction = fetch(&chip8);
 					decode(nextInstruction, &chip8);

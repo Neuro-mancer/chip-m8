@@ -19,6 +19,8 @@
 #define CPU_CLOCK_SPEED 500 // HZ
 #define TIMER_SPEED 60 // HZ
 #define TIMER_TARGET_TIME (1000 / TIMER_SPEED) // in milliseconds
+#define EMULATION_SPEED_MAX 4000 // HZ
+#define EMULATION_SPEED_MIN 100 // HZ
 
 struct Hardware 
 {
@@ -44,6 +46,8 @@ struct Hardware
 	bool keyBuffer[NUM_KEYS];
 
 	enum {EXECUTE, PAUSE, QUIT} STATE;
+
+	uint16_t emulationSpeed;
 };
 
 void decode(uint16_t opcode, struct Hardware *chip8);

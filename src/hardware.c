@@ -43,6 +43,7 @@ void initHardwareValues(struct Hardware *chip8)
 	chip8->Timers.delay = DELAY_TIMER_START;
 	chip8->Timers.sound = SOUND_TIMER_START;
 	chip8->Timers.lastFrameTime = CYCLE_TIMER_START;
+	chip8->emulationSpeed = CPU_CLOCK_SPEED;
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
 	memset(chip8->keyBuffer, false, sizeof chip8->keyBuffer);
 }

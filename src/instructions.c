@@ -63,16 +63,19 @@ void execSetRegXToRegY(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 void execOR(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
 	chip8->V[regNumX] |= chip8->V[regNumY];
+	chip8->V[0xF] = 0;
 }
 
 void execAND(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
 	chip8->V[regNumX] &= chip8->V[regNumY];
+	chip8->V[0xF] = 0;
 }
 
 void execXOR(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
 {
 	chip8->V[regNumX] ^= chip8->V[regNumY];
+	chip8->V[0xF] = 0;
 }
 
 void execAdd(uint8_t regNumX, uint8_t regNumY, struct Hardware *chip8)
@@ -182,7 +185,7 @@ void execDraw(uint8_t regNumX, uint8_t regNumY, uint8_t height, struct Hardware 
 
 void execSkipOnKeyPress(uint8_t regNum, struct Hardware *chip8)
 {
-	chip8->PC += chip8->keyBuffer[chip8->V[regNum]] ? 2 : 0; // think about changing this and similar to if statement?
+	chip8->PC += chip8->keyBuffer[chip8->V[regNum]] ? 2 : 0; 
 }
 
 void execSkipOnKeyNotPressed(uint8_t regNum, struct Hardware *chip8)
@@ -209,10 +212,7 @@ void execAddRegToIndex(uint8_t regNum, struct Hardware *chip8)
 {
 	unsigned int result = chip8->I + chip8->V[regNum];
 	chip8->I = chip8->I + chip8->V[regNum];
-	chip8->V[0xF] = result > 0xFFF; // add macro for 0xFFF?
-	/* 0xFFF is the last addressable memory location for our 4K of RAM
-	// the flag seems to be optional behavior not found on original COSMAC interpreter
-	// it's nonetheless important */
+	chip8->V[0xF] = result > 0xFFF; 
 }
 
 void execGetKey(uint8_t regNum, struct Hardware *chip8)
@@ -229,6 +229,7 @@ void execGetKey(uint8_t regNum, struct Hardware *chip8)
 			while(chip8->keyBuffer[chip8->V[regNum]])
 			{
 				handleInput(chip8);
+				SDL_Delay(16);
 			}
 			break;
 		}
@@ -257,21 +258,24 @@ void execConvertIntToBCD(uint8_t regNum, struct Hardware *chip8)
 	chip8->RAM[chip8->I + 2] = ones;
 }
 
-// note: these instructions follow the modern interpreter routine storing
-// temporary index in for loop, instead of incrementing the I addr register
-// could be an issue with the quirks?
 void execStoreRegInMem(uint8_t regNum, struct Hardware *chip8)
 {
 	for(int reg = 0; reg <= regNum; reg++)
 	{
-		chip8->RAM[chip8->I + reg] = chip8->V[reg];
+		chip8->RAM[chip8->I] = chip8->V[reg];
+		chip8->I++;
 	}
+	
+	chip8->I++;
 }
 
 void execLoadRegFromMem(uint8_t regNum, struct Hardware *chip8)
 {
 	for(int reg = 0; reg <= regNum; reg++)
 	{
-		chip8->V[reg] = chip8->RAM[chip8->I + reg];
+		chip8->V[reg] = chip8->RAM[chip8->I];
+		chip8->I++;
 	}
+
+	chip8->I++;
 }
