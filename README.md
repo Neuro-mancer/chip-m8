@@ -2,8 +2,8 @@
 
 This is my repository for Chip-M8, a CHIP-8 emulator written from scratch in C
 with [SDL (Simple Direct Media Layer)](https://www.libsdl.org/). It uses SDL to
-manage the graphics, sound, and keyboard input and everything else is handled
-using the standard C library. 
+manage the graphics, sound, and keyboard input, Ncurses for a simple debugging
+TUI, the standard C library. 
 
 I plan on adding more features to this in the
 future and optimizing it as much as possible. It has been a great way to
@@ -89,8 +89,10 @@ sprite collision detection much easier for the game developer!
 ### Features
 
 - Written in C with SDL
-- Pause/Play emulation with Escape key
-- Adjust emulation speed by pressing up arrow and down arrow on keyboard
+- Pause/Play emulation
+- Adjust emulation speed on the fly
+- Change the two monochrome display colors
+- Simple debugging mode interface in ncurses
 - Will compile and run on GNU/Linux
 
 
@@ -99,11 +101,11 @@ sprite collision detection much easier for the game developer!
 
 - Add support for common CHIP-8 extensions (SUPER-CHIP and XO-CHIP)
 - ~~Add adjustable emulation speed~~
-- Ability for the user to change the monochrome display colors to suit their
-  fancy
-- Support for additional resolutions
+- ~~Ability for the user to change the monochrome display colors to suit their
+  fancy~~
+- Support for additional resolutions and resizing
 - Multithreading
-- Debugging Mode
+- ~~Debugging Mode~~
 - Windows support?
 
 
@@ -113,16 +115,16 @@ sprite collision detection much easier for the game developer!
 ### Dependencies
 
 Currently, CHIP-M8 only supports GNU/Linux. This project
-requires SDL2, SDL2_Mixer, GCC, and Make to build, below details the 
+requires SDL2, SDL2_Mixer, Ncurses, GCC, and Make to build, below details the 
 process for acquiring the dependencies on your distribution:
 
 #### Arch Linux 
 
-`sudo pacman -S gcc make sdl2 sdl2_mixer`
+`sudo pacman -S gcc make sdl2 sdl2_mixer ncurses`
 
 #### Debian and Ubuntu 
 
-`sudo apt install libsdl2-dev libsdl2-mixer-dev gcc make`
+`sudo apt install libsdl2-dev libsdl2-mixer-dev libncurses-dev gcc make`
 
 ### Cloning and Running
 
@@ -141,6 +143,7 @@ To run, simply type:
 
 
 ### Finding CHIP-8 "ROMs"
+
 First, find some CHIP-8 ROMs to play. Any will suffice, although it should be
 noted that some may be unstable or adhere to certain quirks that are anachronistic
 to a CHIP-8 emulator like this. That is to say, not every programmer will adhere
@@ -152,6 +155,7 @@ Next, go into the directory where the project was built and run the emulator
 passing the ROM filepath as an argument. This will start the emulation.
 
 ### Emulator Control Scheme
+
 Because the original COSMAC VIP had a hexadecimal keypad, certain games may
 give the controls as certain hexadecimal values. For my emulator the bindings
 are analogous to the COSMAC keypad positions. Here is a diagram of the controls
@@ -169,9 +173,42 @@ EMULATOR                      COSMAC
 -----------------  -----------------
 | Z | X | C | V |  | A | 0 | B | F |
 -----------------  -----------------
-
 ```
 
 Different games will have different control schemes; however, I have noticed
-that many modern games use the keys Q, W, and E.
+that many games use the keys Q (4), W (5), and E (6).
+
+Here is a list of bindings specific emulator control flow:
+
+- ESCAPE - Pause/Unpause emulation
+- SPACE - Stop emulator
+- UP ARROW/DOWN ARROW - Speed up/slow down the execution of the emulator 
+  by ~50Hz, respectively
+
+### Emulator Options
+
+#### Change Colors
+
+Chip-M8 has several command line options. Among these is support for 
+changing the colors used on the monochrome display. In order to do this,
+pass the flags `-r [RGB Decimal Red Value here]` to change foreground color.
+For example, if I wanted to change the foreground color to a light pink:
+
+`./emulator <Chip-8 ROM> -r 255 -g 204 -b 229`
+
+If I wanted to change the background color, I simply pass the flag
+`-R [RGB Decimal Red Value Here]`. So, if I wanted to change both
+the background and foreground color to pinkish colors, I simply type:
+
+`./emulator <Chip-8 ROM> -r 255 -g 204 -b 229 -R 255 -G 153 -B 204`
+
+#### Open the debugging interface
+
+If you want to see the values of registers and other abstracted data of the
+emulator, simply type:
+
+`./emulator <Chip-8 ROM> -d`
+
+This will open an Ncurses buffer in the terminal window you opened it with
+and will update the values pertaining to program execution as it runs.
 
