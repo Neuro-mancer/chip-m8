@@ -75,22 +75,12 @@ void handleInput(struct Hardware *chip8)
 					if(chip8->emulationSpeed != EMULATION_SPEED_MAX)
 					{
 						chip8->emulationSpeed += 50;
-						printf("Emulation Speed in Hz: %u\n", chip8->emulationSpeed);
-					}
-					else 
-					{
-						printf("Max Speed Reached!\n");
 					}
 					break;
 				case SDL_SCANCODE_DOWN:
 					if(chip8->emulationSpeed != EMULATION_SPEED_MIN)
 					{
 						chip8->emulationSpeed -= 50;
-						printf("Emulation Speed in Hz: %u\n", chip8->emulationSpeed);
-					}
-					else 
-					{
-						printf("Min Speed Reached!\n");
 					}
 					break;
 				default:

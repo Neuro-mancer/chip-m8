@@ -69,13 +69,13 @@ void playSound(void)
 {
 	Mix_PlayChannel(0, tone, 0);
 }
-void clearScreen(void)
+void clearScreen(struct Hardware *chip8)
 {
-	SDL_SetRenderDrawColor(renderer, 0xB8, 0xC2, 0xB9, 255); // background
+	SDL_SetRenderDrawColor(renderer, chip8->DisplayColors.background[0], chip8->DisplayColors.background[1], chip8->DisplayColors.background[2], 255); // background
 	SDL_RenderClear(renderer);
 }
 
-void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
+void drawPixel(unsigned int x, unsigned int y, bool pixelOn, struct Hardware *chip8)
 {
 	unsigned int transformedX = x * SCREEN_SCALE;
 	unsigned int transformedY = y * SCREEN_SCALE;
@@ -89,11 +89,12 @@ void drawPixel(unsigned int x, unsigned int y, bool pixelOn)
 
 	if(pixelOn)
 	{
-		SDL_SetRenderDrawColor(renderer, 0x38, 0x2b, 0x26, 255); // foreground
+		SDL_SetRenderDrawColor(renderer, chip8->DisplayColors.foreground[0], chip8->DisplayColors.foreground[1], chip8->DisplayColors.foreground[2], 255); // foreground
+		//
 	}
 	else
 	{
-		SDL_SetRenderDrawColor(renderer, 0xB8, 0xC2, 0xB9, 255); // background
+		SDL_SetRenderDrawColor(renderer, chip8->DisplayColors.background[0], chip8->DisplayColors.background[1], chip8->DisplayColors.background[2], 255); // background
 	}
 
 	SDL_RenderFillRect(renderer, &currentPixel);

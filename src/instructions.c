@@ -11,7 +11,7 @@
 void execClearDisplay(struct Hardware *chip8)
 {
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
-	clearScreen();
+	clearScreen(chip8);
 }
 
 void execRet(struct Hardware *chip8)
@@ -177,7 +177,7 @@ void execDraw(uint8_t regNumX, uint8_t regNumY, uint8_t height, struct Hardware 
 					chip8->V[0xF] = 1;
 				}
 
-				drawPixel(x + spriteBit, y + spriteByte, pixelNextState);
+				drawPixel(x + spriteBit, y + spriteByte, pixelNextState, chip8);
 			}
 		}
 	}

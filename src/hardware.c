@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include "hardware.h"
 #include "instructions.h"
+#include "hardware.h"
 #include "graphics.h"
 
 void stackPush(uint16_t item, struct Hardware *chip8)
@@ -44,11 +44,18 @@ void initHardwareValues(struct Hardware *chip8)
 	chip8->Timers.sound = SOUND_TIMER_START;
 	chip8->Timers.lastFrameTime = CYCLE_TIMER_START;
 	chip8->emulationSpeed = CPU_CLOCK_SPEED;
+	chip8->DisplayColors.background[0] = BACK_RED_VAL;
+	chip8->DisplayColors.background[1] = BACK_GREEN_VAL;
+	chip8->DisplayColors.background[2] = BACK_BLUE_VAL;
+	chip8->DisplayColors.foreground[0] = FORE_RED_VAL;
+	chip8->DisplayColors.foreground[1] = FORE_GREEN_VAL;
+	chip8->DisplayColors.foreground[2] = FORE_BLUE_VAL;
+	chip8->debug = false;
 	memset(chip8->displayBuffer, false, sizeof chip8->displayBuffer);
 	memset(chip8->keyBuffer, false, sizeof chip8->keyBuffer);
 }
 
-uint16_t fetch(struct Hardware *chip8)
+void fetch(struct Hardware *chip8)
 {
 	// note: chip-8 opcodes are stored big endian 
 	uint16_t opcodeByteOne, opcodeByteTwo;
@@ -62,12 +69,12 @@ uint16_t fetch(struct Hardware *chip8)
 	fflush(stdout);
 
 	chip8->PC += 2;
-
-	return opcode;
+	chip8->currentInstruction = opcode;
 }
 
-void decode(uint16_t opcode, struct Hardware *chip8)
+void decode(struct Hardware *chip8)
 {
+	uint16_t opcode = chip8->currentInstruction;
 	uint16_t nibbleMaskOne = opcode & 0xF000;
 	uint16_t nibbleMaskTwo = opcode & 0x0F00;
 	uint16_t nibbleMaskThree = opcode & 0x00F0;
@@ -226,8 +233,6 @@ bool loadROMIntoMem(char *fileName, struct Hardware *chip8)
 	bool success;
 	int memByte = PC_START;
 	uint8_t byteData;
-
-	// add if statement that checks if filename is valid then runs so it will no longer segfault
 
 	ROM = fopen(fileName, "rb");
 

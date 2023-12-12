@@ -42,17 +42,24 @@ struct Hardware
 		uint64_t lastFrameTime; // stores time elasped since last cycle
 	} Timers;
 
+	struct DisplayColors // the rgb values of the two colors on display
+	{
+		uint8_t background[3];
+		uint8_t foreground[3];
+	} DisplayColors;
+
 	bool displayBuffer[DISPLAY_HEIGHT][DISPLAY_WIDTH];
 	bool keyBuffer[NUM_KEYS];
 
 	enum {EXECUTE, PAUSE, QUIT} STATE;
-
+	bool debug;
+	uint16_t currentInstruction;
 	uint16_t emulationSpeed;
 };
 
-void decode(uint16_t opcode, struct Hardware *chip8);
+void decode(struct Hardware *chip8);
 
-uint16_t fetch(struct Hardware *chip8);
+void fetch(struct Hardware *chip8);
 
 void stackPush(uint16_t item, struct Hardware *chip8);
 
