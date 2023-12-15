@@ -144,12 +144,12 @@ To run, simply type:
 
 ### Finding CHIP-8 "ROMs"
 
-First, find some CHIP-8 ROMs to play. Any will suffice, although it should be
+First, find some CHIP-8 ROMs to play on the internet. It should be
 noted that some may be unstable or adhere to certain quirks that are anachronistic
-to a CHIP-8 emulator like this. That is to say, not every programmer will adhere
+to a CHIP-8 emulator like this. That is to say, not every game will adhere
 to the rules of the original CHIP-8 standards (said standards are not well
 documented and inconsistent over the many generations of emulators) and some
-roms will likely not work. A quick google search for "CHIP-8 ROMs" will do.
+roms will likely not work. 
 
 Next, go into the directory where the project was built and run the emulator
 passing the ROM filepath as an argument. This will start the emulation.
@@ -175,14 +175,11 @@ EMULATOR                      COSMAC
 -----------------  -----------------
 ```
 
-Different games will have different control schemes; however, I have noticed
-that many games use the keys Q (4), W (5), and E (6).
-
-Here is a list of bindings specific emulator control flow:
+Here is a list of bindings specific to my emulator control flow:
 
 - ESCAPE - Pause/Unpause emulation
 - SPACE - Stop emulator
-- UP ARROW/DOWN ARROW - Speed up/slow down the execution of the emulator 
+- UP ARROW/DOWN ARROW - Speed up/slow down the execution of emulator instructions 
   by ~50Hz, respectively
 
 ### Emulator Options
