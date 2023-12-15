@@ -117,34 +117,50 @@ int main(int argc, char **argv)
 					wrefresh(stackWin);
 					wrefresh(genRegWin);
 					wrefresh(instructionWin);
+					while(chip8.STATE != QUIT)
+					{
+						chip8.Timers.lastFrameTime = SDL_GetPerformanceCounter();
+						handleInput(&chip8);
+
+						if(chip8.STATE == PAUSE)
+						{
+							SDL_Delay(PAUSE_IDLE_TIME);
+							continue;
+						}
+
+						for(int i = 0; i < chip8.emulationSpeed / 60; i++)
+						{
+							fetch(&chip8);
+							updateInstructionWin(instructionWin, &chip8);
+							decode(&chip8);
+							updateStackWin(stackWin, &chip8);
+							updateRegWin(genRegWin, &chip8);
+						}
+
+						cycleTiming(&chip8);
+					}
 				}
-
-				while(chip8.STATE != QUIT)
+				else 
 				{
-					chip8.Timers.lastFrameTime = SDL_GetPerformanceCounter();
-
-					if(chip8.debug)
+					while(chip8.STATE != QUIT)
 					{
-						updateStackWin(stackWin, &chip8);
-						updateRegWin(genRegWin, &chip8);
-						updateInstructionWin(instructionWin, &chip8);
+						chip8.Timers.lastFrameTime = SDL_GetPerformanceCounter();
+						handleInput(&chip8);
+
+						if(chip8.STATE == PAUSE)
+						{
+							SDL_Delay(PAUSE_IDLE_TIME);
+							continue;
+						}
+
+						for(int i = 0; i < chip8.emulationSpeed / 60; i++)
+						{
+							fetch(&chip8);
+							decode(&chip8);
+						}
+
+						cycleTiming(&chip8);
 					}
-
-					handleInput(&chip8);
-
-					if(chip8.STATE == PAUSE)
-					{
-						SDL_Delay(PAUSE_IDLE_TIME);
-						continue;
-					}
-
-					for(int i = 0; i < chip8.emulationSpeed / 60; i++)
-					{
-						fetch(&chip8);
-						decode(&chip8);
-					}
-
-					cycleTiming(&chip8);
 				}
 
 				graphicsCleanup();
@@ -180,7 +196,7 @@ void initNcursesWin(int maxY, int maxX, WINDOW *stackWin, WINDOW *genRegWin, WIN
 	mvwprintw(stackWin, 0, 0, "STACK:");
 
 	box(genRegWin, 0, 0);
-	mvwprintw(genRegWin, 0, 0, "GENERAL-PURPOSE REGISTERS:");
+	mvwprintw(genRegWin, 0, 0, "REGISTERS:");
 
 	box(instructionWin, 0, 0);
 	mvwprintw(instructionWin, 0, 0, "INSTRUCTION AND EXECUTION:");
@@ -188,11 +204,28 @@ void initNcursesWin(int maxY, int maxX, WINDOW *stackWin, WINDOW *genRegWin, WIN
 
 void updateStackWin(WINDOW *stackWin, struct Hardware *chip8)
 {
-	mvwprintw(stackWin, 2, 2, "Stack Pointer: 0x%01X", chip8->Stack.SP);
+	if(chip8->Stack.SP >= 0)
+	{
+		wmove(stackWin, 2, 2);
+		wclrtoeol(stackWin);
+		mvwprintw(stackWin, 2, 2, "Stack Pointer: 0x%01X", chip8->Stack.SP);
+		box(stackWin, 0, 0);
+		mvwprintw(stackWin, 0, 0, "STACK:");
+	}
+	else 
+	{
+		wmove(stackWin, 2, 2);
+		wclrtoeol(stackWin);
+		mvwprintw(stackWin, 2, 2, "Stack Pointer: No items on stack");
+		box(stackWin, 0, 0);
+		mvwprintw(stackWin, 0, 0, "STACK:");
+	}
+
 	for(int memLoc = 0; memLoc < STACK_SIZE; memLoc++)
 	{
 		mvwprintw(stackWin, 4 + memLoc, 2, "0x%01X: 0x%04X", memLoc, chip8->Stack.items[memLoc]);
 	}
+
 	wrefresh(stackWin);
 }
 
@@ -214,13 +247,5 @@ void updateInstructionWin(WINDOW *instructionWin, struct Hardware *chip8)
 	mvwprintw(instructionWin, 2, 2, "Program Counter: 0x%04X", chip8->PC - 2);
 	mvwprintw(instructionWin, 3, 2, "Current Instruction: 0x%04X", chip8->currentInstruction);
 	mvwprintw(instructionWin, 4, 2, "Target Emulation Speed: ~%uHz", chip8->emulationSpeed);
-	if(chip8->STATE == PAUSE)
-	{
-		mvwprintw(instructionWin, 5, 2, "Current Emulator State: Pause");
-	}
-	else 
-	{
-		mvwprintw(instructionWin, 5, 2, "Current Emulator State: Execute");
-	}
 	wrefresh(instructionWin);
 }

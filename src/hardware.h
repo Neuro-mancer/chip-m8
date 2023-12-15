@@ -1,6 +1,5 @@
 #ifndef HARDWARE_H
 #define HARDWARE_H
-
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
@@ -32,7 +31,7 @@ struct Hardware
 	struct Stack
 	{
 		uint16_t items[STACK_SIZE];
-		uint8_t SP;
+		int8_t SP;
 	} Stack;
 
 	struct Timers
