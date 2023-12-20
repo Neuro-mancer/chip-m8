@@ -15,7 +15,7 @@ finally give myself an excuse to learn the basics of SDL and emulation. I am
 this repository's sole maintainer.
 
 
-![alt text](relative%20docs/emulator.png?raw=true "CHIP-M8")
+![CHIP-M8 Screenshot](https://github.com/Neuro-mancer/chip-m8/blob/main/docs/emulator.png?raw=true "CHIP-M8")
 
 
 ## What is CHIP-8?
@@ -97,6 +97,7 @@ sprite collision detection much easier for the game developer!
 - Change the two monochrome display colors
 - Simple debugging mode interface in ncurses
 - Will compile and run on GNU/Linux
+- 1024x512 Resolution
 
 
 ## Planned Features
@@ -204,7 +205,7 @@ the background and foreground color to pinkish colors, I simply type:
 
 Here is what it should look like:
 
-![alt text](relative%20docs/emulatorcolor.png?raw=true "CHIP-M8 Debugging Interface")
+![CHIP-M8 Color Change](https://github.com/Neuro-mancer/chip-m8/blob/main/docs/emulatorcolor.png?raw=true "CHIP-M8 Color")
 
 #### Open the debugging interface
 
@@ -217,4 +218,4 @@ This will open an Ncurses buffer in the terminal window you opened it with
 and will update the values pertaining to program execution as it runs. This is
 what the interface looks like:
 
-![alt text](relative%20docs/debug.png?raw=true "CHIP-M8 Debugging Interface")
+![CHIP-M8 Debugging Interface](https://github.com/Neuro-mancer/chip-m8/blob/main/docs/debug.png?raw=true "CHIP-M8 Debugging Interface")
