@@ -1,6 +1,6 @@
 # CHIP-M8 a CHIP-8 Emulator
 
-This is my repository for Chip-M8, a CHIP-8 emulator written from scratch in C
+This is my repository for CHIP-M8, a CHIP-8 emulator written from scratch in C
 with [SDL (Simple Direct Media Layer)](https://www.libsdl.org/). It uses SDL to
 manage the graphics, sound, and keyboard input, Ncurses for a simple debugging
 TUI, the standard C library. 
@@ -13,6 +13,9 @@ about computer engineering, computer science, and programming in general.
 I undertook this project because I wanted an excuse to brush up on my C skills and
 finally give myself an excuse to learn the basics of SDL and emulation. I am
 this repository's sole maintainer.
+
+
+![alt text](relative%20docs/emulator.png?raw=true "CHIP-M8")
 
 
 ## What is CHIP-8?
@@ -199,6 +202,10 @@ the background and foreground color to pinkish colors, I simply type:
 
 `./emulator <Chip-8 ROM> -r 255 -g 204 -b 229 -R 255 -G 153 -B 204`
 
+Here is what it should look like:
+
+![alt text](relative%20docs/emulatorcolor.png?raw=true "CHIP-M8 Debugging Interface")
+
 #### Open the debugging interface
 
 If you want to see the values of registers and other abstracted data of the
@@ -207,5 +214,7 @@ emulator, simply type:
 `./emulator <Chip-8 ROM> -d`
 
 This will open an Ncurses buffer in the terminal window you opened it with
-and will update the values pertaining to program execution as it runs.
+and will update the values pertaining to program execution as it runs. This is
+what the interface looks like:
 
+![alt text](relative%20docs/debug.png?raw=true "CHIP-M8 Debugging Interface")
